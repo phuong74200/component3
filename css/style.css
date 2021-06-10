@@ -1,0 +1,58 @@
+html {
+    height: 100%;
+}
+
+component {
+    display: none;
+}
+
+body {
+    margin: 0 auto;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+img {
+    width: 300px;
+    height: 300px;
+}
+
+.ex {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    justify-content: center;
+}
+
+.app {
+    font-family: Fira Code Regular;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.footer {
+    font-family: Arial, Helvetica, sans-serif;
+    position: fixed;
+    bottom: 10px;
+    text-align: center;
+}
+
+@media only screen and (max-width: 600px) {
+    body {
+        align-items: flex-start;
+    }
+    .app {
+        font-family: Fira Code Regular;
+        display: grid;
+        grid-template-rows: 1fr 1fr;
+        grid-template-columns: 1fr;
+    }
+    .ex {
+        text-align: center;
+    }
+    .footer {
+        display: none;
+    }
+}

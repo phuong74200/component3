@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <link rel="stylesheet" href="css/style.css"/>
+        <meta property="og:title" content="Component 3"/>
+        <meta property="og:type" content="Website"/>
+        <meta property="og:url" content="localhost:5500"/>
+        <meta property="og:image" content="./assets/full-signal.svg"/>
+        <meta property="og:description" content="A component library help you build page faster"/>
+        <meta charset="UTF-8">
+        <meta name="description" content="Free Web tutorials">
+        <meta name="keywords" content="HTML, CSS, JavaScript">
+        <meta name="author" content="John Doe">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Component 3</title>
+    </head>
+    <component name="HeadBtn">
+        <param name="value"/>
+        <render>
+            <div>
+
+            </div>
+        </render>
+    </component>
+    <component name="App">
+        <param name="icon"></param>
+        <param name="name"></param>
+        <param name="info"></param>
+        <render>
+            <div class='app'>
+                <div class="icon-container">
+                    <!-- using c-src to prevent the error from unable to load an image it will be replaced with src -->
+                    <img c-src="{{icon}}" alt={{icon}}/>
+                </div>
+                <div class="ex">
+                    <div>{{info}}</div>
+                    <root></root>
+                </div>
+            </div>
+        </remder>
+    </component>
+    <body>
+        <div>
+            <App icon="./assets/full-signal.svg" name="component3.js" info="Stable">
+                <div># 1.2.61021b</div>
+                <div># Fuong74200</div>
+                <div># Just 4Fun</div>
+                <div># 05/31/2021</div>
+            </App>
+            <App icon="./assets/low-signal.svg" name="component3.js" info="Current">
+                <div># v1.5.61021a</div>
+                <div># Directly binding</div>
+                <div># Expression inside DOM</div>
+                <div># Fixing bugs</div>
+                <div># Optimize performance</div>
+            </App>
+        </div>
+        <div class="footer">This page was build using component3.js</div>
+    </body>
+    <script src="js/component.js"></script>
+    <script src="js/main.js"></script>
+</html>
