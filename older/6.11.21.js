@@ -133,7 +133,7 @@ const Component = function (callbackScope) {
     observer.observe(document.body, { attributes: true, childList: true, subtree: true });
     return {
         components: componentCons,
-        rebuild: build,
+        build: build,
         render: render
     };
 };

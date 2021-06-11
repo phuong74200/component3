@@ -22,10 +22,11 @@
             </div>
         </render>
     </component>
-    <component name="App">
+    <component name="App" bind="test">
         <param name="icon"></param>
         <param name="name"></param>
         <param name="info"></param>
+        <param name="numb" type="Number"></param>
         <render>
             <div class='app'>
                 <div class="icon-container">
@@ -34,6 +35,8 @@
                 </div>
                 <div class="ex">
                     <div>{{info}}</div>
+                    <div style="{{numb > .5 ? 'background: red' : 'background: green'}}">{{numb}}</div>
+                    <div>N: {{numb + 2}}</div>
                     <root></root>
                 </div>
             </div>
@@ -41,7 +44,7 @@
     </component>
     <body>
         <div>
-            <App icon="./assets/full-signal.svg" name="component3.js" info="Stable">
+            <App icon="./assets/full-signal.svg" name="component3.js" info="Stable" numb="4">
                 <div># 1.2.61021b</div>
                 <div># Fuong74200</div>
                 <div># Just 4Fun</div>
@@ -57,6 +60,6 @@
         </div>
         <div class="footer">This page was build using component3.js</div>
     </body>
-    <script src="js/component.js"></script>
+    <script src="js/anv.js"></script>
     <script src="js/main.js"></script>
 </html>

@@ -1,14 +1,24 @@
 /*
-    component3.js
+    component3.js - anv.js
 
     author: phuong74200
     day: 05/31/2021
     ver: 1.4.61021b
 
-    ** what news **
+    ** what news ** 1.2.61021b.js **
 
     - using varible directly inside html dom
     - fixing expression errors when using IF statement
+
+    ** what news ** 1.3.61121b.js **
+
+    - Replace innerHTML which mays cause xss with a new algorithm
+    - Once you change the value of params the DOM would be affected too
+
+     ** what news ** 1.4.61221b.js **
+
+    - Once params changed, just the DOM which related to param change
+    - Fixed the bug which caused expressions missing after reMap
 
     ** a brand of avail.js **
 
@@ -71,28 +81,46 @@ const Component = function (callbackScope) {
             }
         };
         // data.target.root = rootParent;
+        function reMap(map, value) {
+            if (map.node.nodeType == 3) {
+                map.node.textContent = map.expression;
+            } else {
+                map.node.setAttribute(map.target, map.expression);
+            }
+            mapping(map.node, false);
+        }
         for (let param of componentCons[tag].params) {
             let SELF = data.params;
             switch (param.type) {
                 case "Number":
                     data.params[`_${param.name}`] = parseFloat(element.getAttribute(`${param.name}`));
-                    data.params[`_${param.name}`] = element.getAttribute(`${param.name}`);
                     Object.defineProperty(data.params, param.name, {
-                        get: function(value) {
-                            return  parseFloat(this[`_${param.name}`])
+                        get: function (value) {
+                            return parseFloat(this[`_${param.name}`])
                         },
-                        set: function(value) {
-                            this[`_${param.name}`] = parseFloat(value)
+                        set: function (value) {
+                            this[`_${param.name}`] = parseFloat(value);
+                            for (let map of maps) {
+                                if (map.expression.includes(param.name)) {
+                                    reMap(map)
+                                }
+                            }
                         }
                     })
+                    break;
                 default:
                     data.params[`_${param.name}`] = element.getAttribute(`${param.name}`);
                     Object.defineProperty(data.params, param.name, {
-                        get: function(value) {
+                        get: function (value) {
                             return this[`_${param.name}`]
                         },
-                        set: function(value) {
-                            this[`_${param.name}`] = value
+                        set: function (value) {
+                            this[`_${param.name}`] = value;
+                            for (let map of maps) {
+                                if (map.expression.includes(param.name)) {
+                                    reMap(map)
+                                }
+                            }
                         }
                     })
                     break;
@@ -101,26 +129,52 @@ const Component = function (callbackScope) {
             element.removeAttribute(param.info);
         }
         // -- Replace expression inside DOM
-
-      
-
-        function htmlDecode(input) {
-            var doc = new DOMParser().parseFromString(input, "text/html");
-            return doc.documentElement.textContent;
+        let maps = [];
+        function mapping(node, re = true) {
+            if (node.nodeType == 3) {
+                node.textContent = node.textContent.replace(/\{\{(.*?)\}\}/g, match => {
+                    let params = componentCons[tag].params.map((param, index, params) => {
+                        return param.name;
+                    })
+                    const expression = match.slice(2, match.length - 2);
+                    if (re) {
+                        maps.push({
+                            node: node,
+                            expression: node.textContent,
+                            target: "content"
+                        });
+                    }
+                    const f = new Function(...params, `return ${expression}`)
+                    return f.apply(null, Object.values(data.params));
+                });
+            } else if (node.nodeType == 1) {
+                for (let atr of node.attributes) {
+                    atr.value = atr.value.replace(/\{\{(.*?)\}\}/g, match => {
+                        let params = componentCons[tag].params.map((param, index, params) => {
+                            return param.name;
+                        })
+                        const expression = match.slice(2, match.length - 2);
+                        if (re) {
+                            maps.push({
+                                node: node,
+                                expression: atr.value,
+                                target: atr.name == "c-src" ? "src" : atr.name
+                            });
+                        }
+                        const f = new Function(...params, `return ${expression}`)
+                        return f.apply(null, Object.values(data.params));
+                    });
+                }
+            }
+            for (let child of node.childNodes) mapping(child);
         }
-        cloned.innerHTML = cloned.innerHTML.replace(/\{\{(.*?)\}\}/g, match => {
-            match = htmlDecode(match);
-            let params = componentCons[tag].params.map((param, index, params) => {
-                return param.name;
-            })
-            const expression = match.slice(2, match.length - 2);
-            const f = new Function(...params, `return ${expression}`)
-            return f.apply(null, Object.values(data.params));
-        });
+        mapping(cloned);
+        console.log(maps)
         for (let node of cloned.querySelectorAll("[c-src]")) {
             node.setAttribute("src", node.getAttribute("c-src"));
             node.removeAttribute("c-src");
         }
+
         // -- Change root
         const root = cloned.querySelector(`root`);
         let rootParent;
