@@ -1,0 +1,77 @@
+@font-face {
+    font-family: rubik;
+    src: url(../fonts/Rubik-Regular.ttf);
+}
+
+.menu {
+    position: relative;
+}
+
+.menu:hover .menu-head {
+    box-shadow: rgba(3, 102, 214, 0.3) 0px 0px 0px 3px;
+}
+
+.menu-head {
+    background-color: #fff;
+    font-family: rubik;
+    padding: 16px;
+    border-radius: 7px;
+    border: 2px solid #5844E4;
+    color: #0F0F10;
+    cursor: pointer;
+    outline: none;
+    transition: all .3s;
+}
+
+.menu-body {
+    margin-top: 10px;
+    letter-spacing: 1px;
+    position: absolute;
+    background-color: #fff;
+    font-family: rubik;
+    padding: 10px;
+    box-sizing: border-box;
+    flex-direction: column;
+    border: 2px solid #b3b0c2;
+    color: #0F0F10;
+    border-radius: 7px;
+    width: 100%;
+    user-select: none;
+    overflow-y: auto;
+    max-height: 400px;
+    display: none;
+    transition: all .3s;
+    z-index: 1;
+}
+
+.menu-body:hover {
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+
+.menu-body div {
+    padding: 10px;
+    border-radius: 7px;
+    cursor: pointer;
+    transition: all .1s;
+}
+
+.menu-body div:hover {
+    background: #E9EAFC;
+    color: #6959D1;
+}
+
+.menu-body::-webkit-scrollbar {
+    width: 5px;
+}
+
+.menu-body::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.menu-body::-webkit-scrollbar-thumb {
+    background: #b3b0c2;
+}
+
+.menu-body::-webkit-scrollbar-thumb:hover {
+    background: #b3b0c2;
+}

@@ -3,7 +3,7 @@
 
     author: phuong74200
     day: 05/31/2021
-    ver: 1.4.61021b
+    ver: 1.4.61521b
 
     ** what news ** 1.2.61021b.js **
 
@@ -20,12 +20,39 @@
     - Once params changed, just the DOM which related to param change
     - Fixed the bug which caused expressions missing after reMap
 
+    ** what news ** 1.4.61521.js **
+
+    _ Added debug mode
+        + Once debug mode is turned on, anv.js will also return information for each redered node
+          each of those node is indentify by using a sid
+    - Added inspector
+    - To using inspector please include file anvDebugger.js into your code
+
+    ** what news ** 1.4.4.61521.js **
+
+    - Change anvDebugger.js -> inspector.js
+    - Update inspector.js
+        + move pannel above if out of screen
+        + added render time
+        + change layout
+
     ** a brand of avail.js **
 
     J4F
 */
 
-const Component = function (callbackScope) {
+const Component = function (callbackScope, config = {}) {
+    let fConfig = {
+        debug: false,
+        ...config
+    }
+    let rendered = {};
+    function uuidv4() {
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+            var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+            return v.toString(16);
+        });
+    }
     const getFunctionFromString = function (string) {
         var scope = callbackScope;
         var scopeSplit = string.split('.');
@@ -36,28 +63,32 @@ const Component = function (callbackScope) {
         return scope[scopeSplit[scopeSplit.length - 1]];
     }
     let componentCons = {};
-    for (let component of document.querySelectorAll("component")) {
-        const name = component.getAttribute("name").toLowerCase();
-        const render = component.querySelector("render");
-        const params = component.querySelectorAll("param");
-        componentCons[name] = {
-            render: render.querySelector("*").cloneNode(true),
-            callback: component.getAttribute("bind"),
-            params: []
-        };
-        for (let param of params) {
-            componentCons[name].params.push({
-                name: param.getAttribute("name"),
-                type: param.getAttribute("type")
-            })
+    let componentCollect = htmlDocument => {
+        for (let component of htmlDocument.querySelectorAll("component")) {
+            const name = component.getAttribute("name").toLowerCase();
+            const render = component.querySelector("render");
+            const params = component.querySelectorAll("param");
+            componentCons[name] = {
+                render: render.querySelector("*").cloneNode(true),
+                callback: component.getAttribute("bind"),
+                params: []
+            };
+            for (let param of params) {
+                componentCons[name].params.push({
+                    name: param.getAttribute("name"),
+                    type: param.getAttribute("type"),
+                    default: param.getAttribute("default"),
+                })
+            }
+            // feel free to keep or remove the line belows
+            component.remove();
         }
-        // feel free to keep or remove the line belows
-        component.remove();
     }
+    componentCollect(document)
     const render = function (element) {
+        const start = new Date();
         const tag = element.tagName.toLowerCase();
         let cloned = componentCons[tag].render.cloneNode(true);
-
         for (let atr of element.attributes) {
             if (atr.nodeName == "class") {
                 cloned.classList.add(atr.nodeValue);
@@ -72,13 +103,7 @@ const Component = function (callbackScope) {
         }
         let data = {
             target: cloned,
-            params: {},
-            on: {},
-            api: {
-                components: componentCons,
-                rebuild: build,
-                render: render
-            }
+            params: {}
         };
         // data.target.root = rootParent;
         function reMap(map, value) {
@@ -93,7 +118,7 @@ const Component = function (callbackScope) {
             let SELF = data.params;
             switch (param.type) {
                 case "Number":
-                    data.params[`_${param.name}`] = parseFloat(element.getAttribute(`${param.name}`));
+                    data.params[`_${param.name}`] = parseFloat(element.getAttribute(`${param.name}`) || param.default);
                     Object.defineProperty(data.params, param.name, {
                         get: function (value) {
                             return parseFloat(this[`_${param.name}`])
@@ -109,7 +134,7 @@ const Component = function (callbackScope) {
                     })
                     break;
                 default:
-                    data.params[`_${param.name}`] = element.getAttribute(`${param.name}`);
+                    data.params[`_${param.name}`] = element.getAttribute(`${param.name}`) || param.default;
                     Object.defineProperty(data.params, param.name, {
                         get: function (value) {
                             return this[`_${param.name}`]
@@ -124,6 +149,18 @@ const Component = function (callbackScope) {
                         }
                     })
                     break;
+            }
+            if (fConfig.debug) {
+                const uid = uuidv4();
+                cloned.setAttribute("component", uid);
+                rendered[uid] = {
+                    target: cloned,
+                    params: data.params,
+                    tag: tag,
+                    bind: componentCons[tag].callback,
+                    time: new Date() - start,
+                    timeStamp: new Date()
+                };
             }
             // feel free to keep or remove the line belows
             element.removeAttribute(param.info);
@@ -169,18 +206,17 @@ const Component = function (callbackScope) {
             for (let child of node.childNodes) mapping(child);
         }
         mapping(cloned);
-        console.log(maps)
         for (let node of cloned.querySelectorAll("[c-src]")) {
             node.setAttribute("src", node.getAttribute("c-src"));
             node.removeAttribute("c-src");
         }
-
         // -- Change root
         const root = cloned.querySelector(`root`);
         let rootParent;
         if (root) rootParent = cloned.querySelector(`root`).parentElement;
         if (root) root.replaceWith(...element.childNodes);
         data.target.root = rootParent;
+        data.root = rootParent;
         element.onload = componentCons[tag].callback ? getFunctionFromString(componentCons[tag].callback)(data) : null;
         // if (data.on.complete) data.on.complete();
         if (element.callback) element.callback(data);
@@ -205,10 +241,30 @@ const Component = function (callbackScope) {
         }
     });
     observer.observe(document.body, { attributes: true, childList: true, subtree: true });
+    let loadPending = 0;
+    const load = (url) => {
+        loadPending++;
+        console.warn(" Put all of components into 1 html file may help to improve performance");
+        if (fConfig.debug) console.warn(" Debug mode is on!");
+        fetch(url).then(data => data.text()).then(text => {
+            loadPending--;
+            let div = document.createElement("div");
+            div.innerHTML = text;
+            componentCollect(div);
+            if (loadPending == 0) {
+                document.body.style.visibility = "visible";
+                build();
+            }
+        })
+    };
     return {
         components: componentCons,
         build: build,
-        render: render
+        render: render,
+        load: load,
+        debug: fConfig.debug ? {
+            rendered
+        } : null
     };
 };
 const Element = function (name, params = {}) {

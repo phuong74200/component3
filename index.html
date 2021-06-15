@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <link rel="stylesheet" href="css/style.css"/>
-        <meta property="og:title" content="Component 3"/>
-        <meta property="og:type" content="Website"/>
-        <meta property="og:url" content="localhost:5500"/>
-        <meta property="og:image" content="./assets/full-signal.svg"/>
-        <meta property="og:description" content="A component library help you build page faster"/>
+        <link rel="stylesheet" href="css/style.css" />
+        <link rel="stylesheet" href="css/Menu.css" />
+        <meta property="og:title" content="Component 3" />
+        <meta property="og:type" content="Website" />
+        <meta property="og:url" content="localhost:5500" />
+        <meta property="og:image" content="./assets/full-signal.svg" />
+        <meta property="og:description" content="A component library help you build page faster" />
         <meta charset="UTF-8">
         <meta name="description" content="Free Web tutorials">
         <meta name="keywords" content="HTML, CSS, JavaScript">
@@ -14,52 +15,26 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Component 3</title>
     </head>
-    <component name="HeadBtn">
-        <param name="value"/>
-        <render>
-            <div>
-
-            </div>
-        </render>
-    </component>
-    <component name="App" bind="test">
-        <param name="icon"></param>
-        <param name="name"></param>
-        <param name="info"></param>
-        <param name="numb" type="Number"></param>
-        <render>
-            <div class='app'>
-                <div class="icon-container">
-                    <!-- using c-src to prevent the error from unable to load an image it will be replaced with src -->
-                    <img c-src="{{icon}}" alt={{icon}}/>
-                </div>
-                <div class="ex">
-                    <div>{{info}}</div>
-                    <div style="{{numb > .5 ? 'background: red' : 'background: green'}}">{{numb}}</div>
-                    <div>N: {{numb + 2}}</div>
-                    <root></root>
-                </div>
-            </div>
-        </remder>
-    </component>
     <body>
-        <div>
-            <App icon="./assets/full-signal.svg" name="component3.js" info="Stable" numb="4">
-                <div># 1.2.61021b</div>
-                <div># Fuong74200</div>
-                <div># Just 4Fun</div>
-                <div># 05/31/2021</div>
-            </App>
-            <App icon="./assets/low-signal.svg" name="component3.js" info="Current">
-                <div># v1.5.61021a</div>
-                <div># Directly binding</div>
-                <div># Expression inside DOM</div>
-                <div># Fixing bugs</div>
-                <div># Optimize performance</div>
-            </App>
+        <div style="width: 300px;">
+            <Menu id="fuong">
+                <div>Lorem ipsum dolor sit amet</div>
+                <div>Ut condimentum diam vitae</div>
+                <div>Cras scelerisque</div>
+                <div>Ut non lacinia augue</div>
+                <div>Fusce suscipit</div>
+                <div>Mauris risus arcu</div>
+                <div>Donec leo purus</div>
+                <div>congue nec diam sed</div>
+                <div>Cras vitae est justo</div>
+                <div>Duis convallis dignissim</div>
+                <div>In vestibulum egestas</div>
+            </Menu>
         </div>
+        <Menu style="position: fixed; bottom: 200px;"></Menu>
         <div class="footer">This page was build using component3.js</div>
     </body>
+    <script src="js/inspector.js"></script>
     <script src="js/anv.js"></script>
     <script src="js/main.js"></script>
 </html>

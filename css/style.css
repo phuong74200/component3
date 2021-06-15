@@ -12,24 +12,10 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-}
-
-img {
-    width: 300px;
-    height: 300px;
-}
-
-.ex {
-    display: flex;
+    visibility: hidden;
     flex-direction: column;
-    gap: 20px;
-    justify-content: center;
-}
-
-.app {
-    font-family: Fira Code Regular;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    overflow: hidden;
+    background: #212121;
 }
 
 .footer {
@@ -37,6 +23,9 @@ img {
     position: fixed;
     bottom: 10px;
     text-align: center;
+    user-select: none;
+    width: 100%;
+    color: #f2f2f2;
 }
 
 @media only screen and (max-width: 600px) {
