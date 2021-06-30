@@ -12,36 +12,8 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    visibility: hidden;
     flex-direction: column;
     overflow: hidden;
     background: #212121;
-}
-
-.footer {
-    font-family: Arial, Helvetica, sans-serif;
-    position: fixed;
-    bottom: 10px;
-    text-align: center;
-    user-select: none;
-    width: 100%;
-    color: #f2f2f2;
-}
-
-@media only screen and (max-width: 600px) {
-    body {
-        align-items: flex-start;
-    }
-    .app {
-        font-family: Fira Code Regular;
-        display: grid;
-        grid-template-rows: 1fr 1fr;
-        grid-template-columns: 1fr;
-    }
-    .ex {
-        text-align: center;
-    }
-    .footer {
-        display: none;
-    }
+    color: #ffffff6c;
 }

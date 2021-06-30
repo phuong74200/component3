@@ -2,17 +2,13 @@
 let scope = {
     taskbar: {
         load: (e) => {
-            console.log(e)
-
             setInterval(function () {
-                e.props.pra1 = e.props.pra1 + Math.round(Math.random() * 3);
-            }, 1000)
-            
+                e.props.pra1 = e.props.pra1 + Math.round(Math.random() * 1);
+            }, 50)
             window.addEventListener("mousemove", ev => {
                 e.props.moux = ev.clientX;
                 e.props.mouy = ev.clientY;
             })
-            
         },
         change: (e) => {
             // console.log(e)

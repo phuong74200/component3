@@ -9,13 +9,94 @@
         <meta property="og:image" content="./assets/full-signal.svg" />
         <meta property="og:description" content="A component library help you build page faster" />
         <meta charset="UTF-8">
-        <meta name="description" content="Free Web tutorials">
-        <meta name="keywords" content="HTML, CSS, JavaScript">
-        <meta name="author" content="John Doe">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta *name="description" content="Free Web tutorials">
+        <meta *name="keywords" content="HTML, CSS, JavaScript">
+        <meta *name="author" content="John Doe">
+        <meta *name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Component 3</title>
     </head>
+    <component *name="Tab">
+        <prop *name="name" *type="String" *default="??"></prop>
+        <prop *name="processName" *type="String"></prop>
+        <render>
+            <div class="tab">
+                <root></root>
+                <div class='header'>
+                    <div class="title-container">
+                        <div><img c-src="{{processName}}"></img></div>
+                        <span>{{name}}</span>
+                    </div>
+                    <div class="btns-container">
+                        <div class="btn min"><i class="fi-rr-minus-small"></i></div>
+                        <div class="btn max"><i class="fi-rr-circle-small"></i></div>
+                        <div class="btn close"><i class="fi-rr-cross-small"></i></div>
+                    </div>
+                </div>
+                <div class='body'>
+                    <root></root>
+                </div>
+            </div>
+        </render>
+    </component>
+    <component *name="TaskBar" (load)="taskbar.load" (change)="taskbar.change">
+        <prop *name="pra1" *type="Number">Fuong</prop>
+        <prop *name="pra2" *type="Number">Fuong</prop>
+        <prop *name="pra3" *type="Number">Fuong</prop>
+        <prop *name="moux" *type="Number">0</prop>
+        <prop *name="mouy" *type="Number">0</prop>
+        <render>
+            <div style="top: {{mouy + 10}}px; left: {{moux + 10}}px; position: absolute">
+                <root></root>
+                Test binder --- {{pra3}} ---
+                <h1 class="{{pra1}}">Test binder --- {{pra1}} ---</h1>
+                <h1>{{pra2}}</h1>
+                <h1 xxxx="top: {{pra1 / 10}}px" id="asd">Hello: {{(pra3 + pra1) % 3 == 0 ? `${pra3 + pra1} mod 3` : `${pra3 + pra1} not mod 3`}}</h1>
+                <div class="task-bar"></div>
+                <div class="title-container">
+                    <div class="title-container">
+                        <div class="title-container"></div>
+                    </div>
+                </div>
+                <div class="title-container">
+                    <div class="1"></div>
+                    <div class="2"></div>
+                    <div class="3">
+                        <div class="3-1"></div>
+                        <Desktop class="test">
+                            <Tab></Tab>
+                        </Desktop>
+                    </div>
+                </div>
+            </div>
+        </render>
+    </component>
+    <component *name="Desktop">
+        <render>
+            <div class='desktop-container'>
+                <div class='desktop'>
+                    <h1></h1>
+                    <root></root>
+                </div>
+            </div>
+        </remder>
+    </component>
+    <component *name="App">
+        <prop *name="icon"></prop>
+        <prop *name="name"></prop>
+        <prop *name="info"></prop>
+        <render>
+            <div class='app'>
+                <div class="icon-container">
+                    <img class="icon" c-src="{{icon}}" alt="{{icon}}" title="{{icon}}"></img>
+                </div>
+                <span>{{name}}</span>
+            </div>
+        </remder>
+    </component>
     <body>
+        <div id="main">
+            <TaskBar id='taskBar' pra1="0" pra2="11" pra3="15"><h1>say hello</h1></TaskBar>
+        </div>
         <div style="width: 300px;">
             <Menu id="fuong">
                 <div>Lorem ipsum dolor sit amet</div>
@@ -34,7 +115,7 @@
         <Menu style="position: fixed; bottom: 200px;"></Menu>
         <div class="footer">This page was build using component3.js</div>
     </body>
+    <script src="js/anvil.js"></script>
     <script src="js/inspector.js"></script>
-    <script src="js/anv.js"></script>
     <script src="js/main.js"></script>
 </html>
