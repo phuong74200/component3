@@ -1,5 +1,5 @@
 /*
-    project: anvil.js - next version of component.js
+    project: anvil.js - improved component.js
     version: 4.0.0
     author : fuong74200
     day    : 22 June 2021
@@ -63,6 +63,9 @@ const Anvil = function (callbackScope) {
             }
             let children = dest.querySelectorAll("*")
         },
+
+        // listen for props change and then update the Node
+
         bind: function (tagName, element) {
             const BIND = this;
             this._hold_ = {
@@ -94,6 +97,9 @@ const Anvil = function (callbackScope) {
                     }
                 }
             };
+
+            // collect all props of the component
+
             this.collect = () => {
                 for (let prop of ANVIL._hold_.components[tagName].props) {
                     switch (prop.type) {
@@ -109,7 +115,7 @@ const Anvil = function (callbackScope) {
                                 }
                             })
                             break;
-                        case "String":
+                        default:
                             this._hold_.props[`_${prop.name}`] = element.getAttribute(`${prop.name}`) || prop.default;
                             Object.defineProperty(this._hold_.props, prop.name, {
                                 get: function () {

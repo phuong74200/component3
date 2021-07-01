@@ -15,6 +15,13 @@
         <meta *name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Component 3</title>
     </head>
+
+    <component *name="Icon">
+        <render>
+            <div class="halves-circle"></div>
+        </render>
+    </component>
+
     <component *name="Tab">
         <prop *name="name" *type="String" *default="??"></prop>
         <prop *name="processName" *type="String"></prop>
@@ -45,7 +52,8 @@
         <prop *name="moux" *type="Number">0</prop>
         <prop *name="mouy" *type="Number">0</prop>
         <render>
-            <div style="top: {{mouy + 10}}px; left: {{moux + 10}}px; position: absolute">
+            <div style="top: {{mouy}}px; left: {{moux}}px; position: absolute; pointer-events: none">
+                <img *src="./assets/file.svg"/>
                 <root></root>
                 Test binder --- {{pra3}} ---
                 <h1 class="{{pra1}}">Test binder --- {{pra1}} ---</h1>
@@ -97,6 +105,7 @@
         <div id="main">
             <TaskBar id='taskBar' pra1="0" pra2="11" pra3="15"><h1>say hello</h1></TaskBar>
         </div>
+        <Icon></Icon>
         <div style="width: 300px;">
             <Menu id="fuong">
                 <div>Lorem ipsum dolor sit amet</div>
